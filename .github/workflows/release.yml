@@ -81,8 +81,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Debug info
+        run: |
+          node --version
+          npm --version
+          npm list electron-vite
+          ls -la node_modules/.bin/
+
       - name: Build app
-        run: npm run build
+        run: npm run build 2>&1
 
       - name: Package macOS artifacts
         env:
@@ -117,8 +124,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Debug info
+        run: |
+          node --version
+          npm --version
+          npm list electron-vite
+          ls -la node_modules/.bin/
+
       - name: Build app
-        run: npm run build
+        run: npm run build 2>&1
 
       - name: Install rpmbuild
         run: sudo apt-get update && sudo apt-get install -y rpm
@@ -154,8 +168,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Debug info
+        run: |
+          node --version
+          npm --version
+          npm list electron-vite
+          ls -la node_modules/.bin/
+
       - name: Build app
-        run: npm run build
+        run: npm run build 2>&1
 
       - name: Package Windows artifacts
         run: npx electron-builder --win nsis --x64 --publish never
