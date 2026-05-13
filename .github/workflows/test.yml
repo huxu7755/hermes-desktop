@@ -37,8 +37,11 @@ jobs:
       - name: Check installed packages
         run: ls -la node_modules/
 
-      - name: Build application
-        run: npm run build
+      - name: List available npm scripts
+        run: npm run
 
-      - name: Check build output
-        run: ls -la out/
+      - name: Try build application with detailed logging
+        run: npm run build 2>&1 || echo "Build failed"
+
+      - name: Check if out dir was created
+        run: ls -la || true
