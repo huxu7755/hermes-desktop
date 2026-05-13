@@ -36,3 +36,9 @@ jobs:
 
       - name: Check installed packages
         run: ls -la node_modules/
+
+      - name: Build application
+        run: npm run build
+
+      - name: Check build output
+        run: ls -la out/
