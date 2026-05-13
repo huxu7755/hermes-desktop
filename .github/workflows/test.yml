@@ -30,3 +30,9 @@ jobs:
 
       - name: Check package.json
         run: cat package.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Check installed packages
+        run: ls -la node_modules/
