@@ -51,3 +51,15 @@ export function safeWriteFile(filePath: string, content: string): void {
   if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
   writeFileSync(filePath, content, "utf-8");
 }
+
+/**
+ * Get the paths for a profile.
+ */
+export function profilePaths(profile?: string): { home: string; models: string; agents: string } {
+  const home = profileHome(profile);
+  return {
+    home,
+    models: join(home, "models.json"),
+    agents: join(home, "agents.json"),
+  };
+}
