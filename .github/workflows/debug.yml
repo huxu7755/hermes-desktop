@@ -69,6 +69,8 @@ jobs:
         run: |
           echo "=== Final dist/ directory ==="
           ls -la dist/ 2>&1 || echo "dist directory not found"
+          echo "=== Checking if any files exist ==="
+          find dist/ -type f 2>/dev/null || echo "No files in dist"
 
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
