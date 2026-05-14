@@ -54,6 +54,8 @@ jobs:
           echo "=== Starting electron-builder ==="
           npx electron-builder --linux AppImage --publish never 2>&1 | tee /tmp/electron-builder.log
           echo "=== electron-builder completed with exit code: $? ==="
+          echo "=== electron-builder log content ==="
+          cat /tmp/electron-builder.log
         continue-on-error: true
 
       - name: Upload electron-builder logs
