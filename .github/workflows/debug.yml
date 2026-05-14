@@ -2,6 +2,9 @@ name: Debug Build
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - release
 
 jobs:
   debug_linux:
@@ -18,16 +21,49 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install 2>&1 | tail -50
+        run: |
+          echo "=== Starting npm install ==="
+          npm install 2>&1 | tee /tmp/npm-install.log
+          echo "=== npm install completed ==="
 
       - name: Run build
-        run: npm run build 2>&1 | tail -100
+        run: |
+          echo "=== Starting npm run build ==="
+          npm run build 2>&1 | tee /tmp/npm-build.log
+          echo "=== Build completed with exit code: $? ==="
+        continue-on-error: true
 
       - name: Check build output
-        run: ls -la out/ || echo "out directory not found"
+        run: |
+          echo "=== Checking out/ directory ==="
+          ls -la out/ 2>&1 || echo "out directory not found"
+          echo "=== Checking dist/ directory ==="
+          ls -la dist/ 2>&1 || echo "dist directory not found"
+
+      - name: Upload build logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-logs
+          path: |
+            /tmp/npm-install.log
+            /tmp/npm-build.log
 
       - name: Run electron-builder
-        run: npx electron-builder --linux AppImage --publish never 2>&1 | tail -100
+        run: |
+          echo "=== Starting electron-builder ==="
+          npx electron-builder --linux AppImage --publish never 2>&1 | tee /tmp/electron-builder.log
+          echo "=== electron-builder completed with exit code: $? ==="
+        continue-on-error: true
 
-      - name: Check dist output
-        run: ls -la dist/ || echo "dist directory not found"
+      - name: Upload electron-builder logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: electron-builder-logs
+          path: /tmp/electron-builder.log
+
+      - name: Check final dist output
+        run: |
+          echo "=== Final dist/ directory ==="
+          ls -la dist/ 2>&1 || echo "dist directory not found"
