@@ -1,0 +1,33 @@
+name: Debug Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debug_linux:
+    name: Debug Linux Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install 2>&1 | tail -50
+
+      - name: Run build
+        run: npm run build 2>&1 | tail -100
+
+      - name: Check build output
+        run: ls -la out/ || echo "out directory not found"
+
+      - name: Run electron-builder
+        run: npx electron-builder --linux AppImage --publish never 2>&1 | tail -100
+
+      - name: Check dist output
+        run: ls -la dist/ || echo "dist directory not found"
