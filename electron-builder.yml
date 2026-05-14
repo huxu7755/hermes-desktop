@@ -3,7 +3,6 @@ productName: Hermes Agent
 directories:
   buildResources: build
   output: dist
-beforeBuild: npm run build
 files:
   - "!**/.vscode/*"
   - "!src/*"
